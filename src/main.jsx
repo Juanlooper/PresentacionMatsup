@@ -1,0 +1,13 @@
+import React from 'react';
+import '@fontsource/dm-sans/latin-400.css';
+import '@fontsource/dm-sans/latin-500.css';
+import '@fontsource/dm-sans/latin-600.css';
+import '@fontsource/manrope/latin-400.css';
+import '@fontsource/manrope/latin-500.css';
+import '@fontsource/manrope/latin-600.css';
+import '@fontsource/manrope/latin-800.css';
+import { createRoot } from 'react-dom/client';
+import 'katex/dist/katex.min.css';
+import './styles.css';
+import App from './App.jsx';
+createRoot(document.getElementById('root')).render(<React.StrictMode><App /></React.StrictMode>);

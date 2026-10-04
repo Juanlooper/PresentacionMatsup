@@ -1,0 +1,108 @@
+const s = (title, eq, text, change) => ({ title, eq, text, change });
+export const lessons = [
+  {
+    id: '1a', name: 'Una señal que se apaga', type: 'Transformada directa', tag: 'Serie geométrica',
+    problem: String.raw`x_k=\left(\frac13\right)^k,\quad k\geq0`,
+    task: 'Calcular la transformada Z y establecer su región de convergencia.',
+    intro: 'Una muestra conserva la tercera parte de la anterior. Convertimos esa sucesión infinita en una sola expresión.',
+    result: String.raw`X(z)=\frac{3z}{3z-1},\qquad |z|>\frac13`, radius: 1/3, poles: [[1/3,0]],
+    graphNote: 'Cada tallo es una muestra discreta. La altura se divide entre 3 en cada avance; la sucesión tiende a cero.',
+    steps: [
+      s('Escribir las primeras muestras', String.raw`x_0=1,\quad x_1=\frac13,\quad x_2=\frac19,\quad x_3=\frac1{27}`, 'Sustituimos k = 0, 1, 2 y 3. El primer término es 1 porque toda base no nula elevada a cero vale 1.', 'El exponente se convierte en una lista de muestras.'),
+      s('Partir de la definición unilateral', String.raw`X(z)=\sum_{k=0}^{\infty}x_kz^{-k}`, 'Usamos k ≥ 0, igual que en la resolución manuscrita de 1a. z es una variable compleja; no es el tiempo.', 'Pasamos de las muestras al dominio z.'),
+      s('Sustituir la sucesión', String.raw`X(z)=\sum_{k=0}^{\infty}\left(\frac13\right)^kz^{-k}`, 'Reemplazamos xₖ por su fórmula. Todavía no sumamos ni eliminamos términos.', 'xₖ se reemplaza por (1/3)ᵏ.'),
+      s('Unir las potencias', String.raw`\left(\frac13\right)^kz^{-k}=\left(\frac{1}{3z}\right)^k\quad\Longrightarrow\quad X(z)=\sum_{k=0}^{\infty}\left(\frac1{3z}\right)^k`, 'Como z⁻ᵏ = 1/zᵏ, las dos potencias tienen el mismo exponente y se agrupan en una sola base.', 'La razón geométrica queda r = 1/(3z).'),
+      s('Comprobar cuándo converge', String.raw`|r|<1\quad\Longleftrightarrow\quad\left|\frac1{3z}\right|<1\quad\Longleftrightarrow\quad\frac1{3|z|}<1\quad\Longleftrightarrow\quad |z|>\frac13`, 'La serie geométrica converge si la magnitud de la razón es menor que 1. En la frontera las magnitudes de los términos no tienden a cero.', 'La desigualdad define el exterior del círculo de radio 1/3.'),
+      s('Sumar la serie geométrica', String.raw`1+r+r^2+\cdots=\frac1{1-r}\quad\Longrightarrow\quad X(z)=\frac1{1-\frac1{3z}}`, 'Aplicamos la suma con primer término 1 y razón r = 1/(3z), únicamente dentro de la región recién obtenida.', 'Una suma infinita se convierte en una fracción.'),
+      s('Simplificar el denominador', String.raw`1-\frac1{3z}=\frac{3z-1}{3z}\quad\Longrightarrow\quad X(z)=\frac1{\frac{3z-1}{3z}}=\frac{3z}{3z-1}`, 'Para sumar 1 y −1/(3z), escribimos 1 = 3z/(3z). Dividir entre una fracción equivale a multiplicar por su recíproco.', 'Desaparece la fracción dentro de otra fracción.'),
+      s('Presentar y verificar el resultado', String.raw`X(z)=\frac{3z}{3z-1}=\frac z{z-\frac13},\quad |z|>\frac13;\qquad X(1)=\frac32`, 'En z = 1, la serie original es 1 + 1/3 + 1/9 + … = 3/2. La fórmula da el mismo valor. El polo está en z = 1/3.', 'La fórmula final y la suma directa coinciden.')
+    ],
+    caseTitle: 'Dilución en un laboratorio', caseText: 'Modelo ideal: un recipiente bien mezclado comienza con 81 mg/L. En cada ciclo se conserva un tercio de la solución y se repone el resto con disolvente limpio, manteniendo el volumen. La concentración normalizada es exactamente xₖ.',
+    caseEq: String.raw`C_{k+1}=\frac13C_k,\quad C_0=81\ \mathrm{mg/L}\quad\Rightarrow\quad C_k=81\left(\frac13\right)^k`,
+    caseUnit: 'mg/L', caseLabel: 'Concentración', caseScale: 81, caseKind: 'tank', caseMeaning: 'El nivel coloreado representa la concentración relativa, no el volumen del recipiente.'
+  },
+  {
+    id:'1f', name:'Una oscilación muestreada', type:'Transformada directa', tag:'Seno discreto',
+    problem:String.raw`x_k=\sin\left(\frac{k\pi}{6}\right),\quad k\geq0`,
+    task:'Calcular la transformada Z y establecer su región de convergencia.',
+    intro:'La señal sube, baja y vuelve al inicio cada 12 muestras. Euler nos permite sumar sus dos componentes geométricas.',
+    result:String.raw`X(z)=\frac{z}{2\left(z^2-\sqrt3z+1\right)},\qquad |z|>1`, radius:1, poles:[[Math.sqrt(3)/2,.5],[Math.sqrt(3)/2,-.5]],
+    graphNote:'El seno continuo es una guía visual; la sucesión está formada solamente por los tallos. Su período discreto es 12.',
+    steps:[
+      s('Identificar el ángulo y las muestras',String.raw`\theta=\frac\pi6;\quad x_0=0,\ x_1=\frac12,\ x_2=\frac{\sqrt3}2,\ x_3=1`, 'Cada muestra aumenta el ángulo π/6 radianes, es decir, 30°. Doce incrementos completan 2π.', 'Aparece una oscilación de período 12.'),
+      s('Escribir la definición',String.raw`X(z)=\sum_{k=0}^{\infty}\sin(k\theta)z^{-k}`, 'Sustituimos el seno en la definición unilateral, sin usar directamente una tabla de resultados.', 'La señal se introduce en la suma.'),
+      s('Obtener el seno con Euler',String.raw`e^{ik\theta}=\cos(k\theta)+i\sin(k\theta),\quad e^{-ik\theta}=\cos(k\theta)-i\sin(k\theta)`, 'i² = −1. Las dos exponenciales tienen partes reales iguales y partes imaginarias opuestas.', 'Se escriben las dos identidades de Euler.'),
+      s('Restar y despejar el seno',String.raw`e^{ik\theta}-e^{-ik\theta}=2i\sin(k\theta)\quad\Rightarrow\quad\sin(k\theta)=\frac{e^{ik\theta}-e^{-ik\theta}}{2i}`, 'Al restar, los cosenos se cancelan. Dividimos entre 2i para aislar el seno.', 'El seno se convierte en dos exponenciales.'),
+      s('Separar las dos series',String.raw`X(z)=\frac1{2i}\left[\sum_{k=0}^{\infty}\left(\frac{e^{i\theta}}z\right)^k-\sum_{k=0}^{\infty}\left(\frac{e^{-i\theta}}z\right)^k\right]`, 'Aplicamos linealidad y agrupamos las potencias. Las razones son eⁱᶿ/z y e⁻ⁱᶿ/z.', 'Tenemos dos series geométricas.'),
+      s('Encontrar la región común',String.raw`|e^{i\theta}|=|e^{-i\theta}|=1;\quad \left|\frac{e^{\pm i\theta}}z\right|=\frac1{|z|}<1\quad\Rightarrow\quad |z|>1`, 'Ambas series convergen fuera del círculo unitario. En |z| = 1, |sin(kπ/6)z⁻ᵏ| no tiende a cero; por eso la frontera tampoco converge.', 'La ROC es el exterior del círculo unitario.'),
+      s('Sumar cada serie',String.raw`X(z)=\frac1{2i}\left[\frac1{1-e^{i\theta}/z}-\frac1{1-e^{-i\theta}/z}\right]=\frac1{2i}\left[\frac z{z-e^{i\theta}}-\frac z{z-e^{-i\theta}}\right]`, 'Aplicamos 1/(1−r) a cada suma. Multiplicamos numerador y denominador de cada fracción por z.', 'Cada serie se reemplaza por una fracción.'),
+      s('Usar un denominador común',String.raw`X(z)=\frac{z\left[(z-e^{-i\theta})-(z-e^{i\theta})\right]}{2i(z-e^{i\theta})(z-e^{-i\theta})}`, 'La primera fracción se multiplica por z−e⁻ⁱᶿ y la segunda por z−eⁱᶿ. Conservamos el signo menos delante del segundo paréntesis.', 'Las dos fracciones se convierten en una.'),
+      s('Simplificar el numerador',String.raw`(z-e^{-i\theta})-(z-e^{i\theta})=e^{i\theta}-e^{-i\theta}=2i\sin\theta`, 'Los términos z se cancelan y la identidad de Euler vuelve a aparecer. El factor 2i se cancela con el del denominador.', 'El numerador queda z sin θ.'),
+      s('Expandir el denominador',String.raw`(z-e^{i\theta})(z-e^{-i\theta})=z^2-z(e^{i\theta}+e^{-i\theta})+1=z^2-2z\cos\theta+1`, 'El producto de las exponenciales es e⁰ = 1, y su suma es 2 cos θ. Así desaparecen los números complejos de la fórmula.', 'El denominador queda real.'),
+      s('Sustituir el ángulo exacto',String.raw`\sin\frac\pi6=\frac12,\quad\cos\frac\pi6=\frac{\sqrt3}2;\qquad X(z)=\frac{z/2}{z^2-2z(\sqrt3/2)+1}`, 'Usamos los valores trigonométricos exactos. El factor 2 multiplicado por √3/2 da √3.', 'θ se sustituye por π/6.'),
+      s('Resultado y polos',String.raw`X(z)=\frac z{2(z^2-\sqrt3z+1)},\quad |z|>1;\qquad z=\frac{\sqrt3\pm i}2=e^{\pm i\pi/6}`, 'Los dos polos tienen módulo 1. No se cancelan con el numerador; la región exterior encontrada es la ROC de esta sucesión causal.', 'Queda la expresión final con su ROC.')
+    ],
+    caseTitle:'Un sensor de vibración',caseText:'Modelo ideal: un sensor mide un desplazamiento sinusoidal de amplitud 1 mm y frecuencia 1 Hz, con 12 muestras por segundo. Cada lectura reproduce sin(kπ/6). No se añaden ruido ni amortiguamiento al ejercicio.',
+    caseEq:String.raw`d(t)=\sin(2\pi t)\ \mathrm{mm},\quad t_k=\frac k{12}\ \mathrm{s}\quad\Rightarrow\quad d_k=\sin\left(\frac{k\pi}6\right)\ \mathrm{mm}`,
+    caseUnit:'mm',caseLabel:'Desplazamiento',caseScale:1,caseKind:'sensor',caseMeaning:'El bloque oscila alrededor de su posición de equilibrio; un ciclo dura 1 segundo.'
+  },
+  {
+    id:'3d',name:'Reconstruir la señal',type:'Transformada inversa',tag:'Impulsos y retardos',
+    problem:String.raw`Y(z)=\frac{1+z}{z^3}+\frac{3z}{3z+1}`,
+    task:'Invertir la transformada Z y expresar la sucesión lo más simplificada posible.',
+    intro:'Leemos cada parte de la expresión: dos eventos puntuales y una respuesta que alterna su signo y se atenúa.',
+    result:String.raw`y_k=\delta_{k,2}+\delta_{k,3}+\left(-\frac13\right)^k,\quad k\geq0`,radius:1/3,poles:[[0,0],[-1/3,0]],
+    graphNote:'Los impulsos añaden exactamente 1 en k = 2 y k = 3. El resto de las muestras sigue la exponencial alternante.',
+    steps:[
+      s('Fijar la convención',String.raw`Y(z)=\sum_{k=0}^{\infty}y_kz^{-k},\qquad y_k=0\ \text{para }k<0`, 'El enunciado no especifica una ROC. Adoptamos la transformada unilateral, coherente con 1a y las condiciones iniciales de 4d. En una transformada bilateral, haría falta la ROC para elegir una inversa única.', 'Elegimos explícitamente la sucesión causal.'),
+      s('Separar el numerador',String.raw`\frac{1+z}{z^3}=\frac1{z^3}+\frac z{z^3}=z^{-3}+z^{-2}`, 'Dividimos cada sumando por z³. En z/z³, restamos exponentes: 1−3 = −2.', 'Aparecen los retardos 3 y 2.'),
+      s('Normalizar la fracción restante',String.raw`\frac{3z}{3z+1}=\frac{3z/3}{(3z+1)/3}=\frac z{z+\frac13}=\frac z{z-(-\frac13)}`, 'Dividimos numerador y denominador entre 3. La base geométrica es −1/3, porque la forma estándar usa z−a.', 'Se reconoce la base a = −1/3.'),
+      s('Reunir las formas conocidas',String.raw`Y(z)=z^{-3}+z^{-2}+\frac z{z-(-\frac13)}`, 'Ahora hay tres sumandos cuya inversa podemos obtener directamente de la definición.', 'La expresión está lista para invertir término a término.'),
+      s('Definir y transformar un impulso',String.raw`\delta_{k,m}=\begin{cases}1,&k=m\\0,&k\ne m\end{cases};\qquad \sum_{k=0}^{\infty}\delta_{k,m}z^{-k}=z^{-m}`, 'El impulso discreto o delta de Kronecker no es infinito: vale 1 en una sola muestra. En la suma sólo sobrevive el término k = m.', 'Una potencia z⁻ᵐ representa un evento en k = m.'),
+      s('Invertir los dos retardos',String.raw`\mathcal Z^{-1}\{z^{-3}\}=\delta_{k,3},\qquad\mathcal Z^{-1}\{z^{-2}\}=\delta_{k,2}`, 'Cada potencia indica la posición, no una amplitud: ambos impulsos tienen amplitud 1.', 'Se colocan dos impulsos en las muestras 3 y 2.'),
+      s('Obtener la pareja geométrica',String.raw`\mathcal Z\{a^k\}=\sum_{k=0}^{\infty}(a/z)^k=\frac1{1-a/z}=\frac z{z-a},\qquad |z|>|a|`, 'La misma serie geométrica de 1a justifica la pareja. Para a = −1/3, el signo alterna y la magnitud se divide entre 3.', 'La fracción z/(z−a) vuelve a la sucesión aᵏ.'),
+      s('Invertir y sumar por linealidad',String.raw`y_k=\delta_{k,3}+\delta_{k,2}+\left(-\frac13\right)^k,\qquad k\geq0`, 'Aplicamos la inversa a cada término y conservamos sus coeficientes, todos iguales a 1.', 'Las tres componentes forman la señal completa.'),
+      s('Escribir sin notación de impulsos',String.raw`y_k=\begin{cases}\frac{10}{9},&k=2\\\frac{26}{27},&k=3\\(-\frac13)^k,&k\geq0,\ k\notin\{2,3\}\end{cases}`, 'En k = 2: 1 + 1/9 = 10/9. En k = 3: 1 − 1/27 = 26/27. En las demás muestras, ambos impulsos valen cero.', 'La fórmula se convierte en una expresión por casos.'),
+      s('Comprobar muestras y convergencia',String.raw`\{y_k\}=\left\{1,-\frac13,\frac{10}{9},\frac{26}{27},\frac1{81},-\frac1{243},\ldots\right\},\qquad \mathrm{ROC}:\ |z|>\frac13`, 'Los términos finitos z⁻² y z⁻³ exigen z ≠ 0. La componente geométrica exige |z| > 1/3, lo que ya excluye el origen. Volver a transformar la suma recupera exactamente Y(z).', 'Las muestras y la ROC verifican la reconstrucción.')
+    ],
+    caseTitle:'La respuesta de un filtro digital',caseText:'Ejemplo de diseño: ante una entrada de impulso unitario, un filtro produce hₖ = (−1/3)ᵏ + δₖ,₂ + δₖ,₃. Una rama recursiva alterna y atenúa; dos ramas de retardo añaden un pulso en las muestras 2 y 3. Es una implementación ilustrativa de la misma sucesión.',
+    caseEq:String.raw`v_k=-\frac13v_{k-1}+\delta_{k,0},\quad v_{-1}=0;\qquad h_k=v_k+\delta_{k,2}+\delta_{k,3}`,
+    caseUnit:'u.',caseLabel:'Salida del filtro',caseScale:1,caseKind:'filter',caseMeaning:'Los indicadores de retardo se encienden sólo cuando k = 2 o k = 3. La entrada fue un impulso en k = 0.'
+  },
+  {
+    id:'4d',name:'Resolver una recurrencia',type:'Ecuación en diferencias',tag:'Condiciones iniciales',
+    problem:String.raw`y_{k+3}+y_{k+2}-5y_{k+1}+3y_k=0`,
+    initial:String.raw`y_0=0,\qquad y_1=-1,\qquad y_2=2`,
+    task:'Resolver usando los métodos de la transformada Z, para k ≥ 0.',
+    intro:'Las condiciones iniciales viajan con cada desplazamiento. Convertimos la recurrencia en álgebra y regresamos a las muestras.',
+    result:String.raw`y_k=\frac{(-3)^k-1}{4},\quad k\geq0;\qquad \mathrm{ROC}:\ |z|>3`,radius:3,poles:[[-3,0],[1,0]],
+    graphNote:'El signo alterna y la magnitud crece. El modo (−3)ᵏ domina; la solución no se amortigua.',
+    steps:[
+      s('Registrar los datos iniciales',String.raw`y_{k+3}+y_{k+2}-5y_{k+1}+3y_k=0;\quad y_0=0,\ y_1=-1,\ y_2=2`, 'Una recurrencia de orden 3 necesita tres valores iniciales. Se conservan exactamente los datos del trabajo y del PDF resuelto.', 'Se identifican los tres valores que acompañarán los desplazamientos.'),
+      s('Derivar la regla de adelanto',String.raw`\mathcal Z\{y_{k+m}\}=\sum_{k=0}^{\infty}y_{k+m}z^{-k}=z^m\sum_{j=m}^{\infty}y_jz^{-j}=z^m\left[Y(z)-\sum_{j=0}^{m-1}y_jz^{-j}\right]`, 'Hacemos j = k + m, de modo que z⁻ᵏ = zᵐz⁻ʲ. Completamos la suma desde j = 0 y restamos las muestras iniciales que añadimos. Éste es el origen de las correcciones.', 'Un adelanto añade una potencia de z y resta datos iniciales.'),
+      s('Desplazar una muestra',String.raw`\mathcal Z\{y_{k+1}\}=zY(z)-zy_0=zY(z)`, 'Para m = 1 sólo se resta zy₀. Como y₀ = 0, esa corrección desaparece.', 'El adelanto de 1 queda zY(z).'),
+      s('Desplazar dos muestras',String.raw`\mathcal Z\{y_{k+2}\}=z^2Y(z)-z^2y_0-zy_1=z^2Y(z)-0-z(-1)=z^2Y(z)+z`, 'El signo de la corrección cambia: −z multiplicado por −1 da +z.', 'El adelanto de 2 añade +z.'),
+      s('Desplazar tres muestras',String.raw`\mathcal Z\{y_{k+3}\}=z^3Y(z)-z^3y_0-z^2y_1-zy_2=z^3Y(z)+z^2-2z`, 'El término de y₀ vale cero; −z²(−1) = +z²; y −z(2) = −2z. Se muestran las tres correcciones.', 'El adelanto de 3 añade +z²−2z.'),
+      s('Transformar toda la ecuación',String.raw`\mathcal Z\{y_{k+3}\}+\mathcal Z\{y_{k+2}\}-5\mathcal Z\{y_{k+1}\}+3Y(z)=0`, 'Por linealidad, los coeficientes 1, 1, −5 y 3 permanecen fuera de cada transformada. La transformada de cero es cero.', 'La recurrencia entra al dominio z.'),
+      s('Sustituir cada adelanto',String.raw`(z^3Y+z^2-2z)+(z^2Y+z)-5zY+3Y=0`, 'Reemplazamos cada transformada por los resultados anteriores. Y abrevia Y(z). Se conservan los paréntesis para evitar errores de signos.', 'La ecuación contiene sólo Y(z) y potencias de z.'),
+      s('Agrupar y despejar',String.raw`(z^3+z^2-5z+3)Y+(z^2-z)=0\quad\Rightarrow\quad(z^3+z^2-5z+3)Y=-z^2+z`, 'Los términos independientes dan z²−2z+z = z²−z. Al pasarlos al lado derecho cambian de signo.', 'El numerador que se despeja es −z²+z.'),
+      s('Dividir por el polinomio',String.raw`Y(z)=\frac{-z^2+z}{z^3+z^2-5z+3}`, 'Aislamos Y(z). Antes de invertir debemos factorizar el denominador y comprobar si existe algún factor común.', 'La ecuación se convierte en una función racional.'),
+      s('Encontrar una raíz',String.raw`P(z)=z^3+z^2-5z+3;\qquad P(1)=1+1-5+3=0`, 'z = 1 es raíz; por el teorema del factor, z−1 divide el polinomio.', 'Se detecta el factor z−1.'),
+      s('Dividir el polinomio, sin saltos',String.raw`\begin{aligned}P-z^2(z-1)&=2z^2-5z+3\\(2z^2-5z+3)-2z(z-1)&=-3z+3\\(-3z+3)-(-3)(z-1)&=0\end{aligned}`, 'El cociente se construye con z², luego +2z y finalmente −3. En cada fila se resta el producto correspondiente; el resto final es cero.', 'El cociente es z²+2z−3.'),
+      s('Factorizar el cociente',String.raw`z^2+2z-3=(z-1)(z+3)\quad\Rightarrow\quad P(z)=(z-1)^2(z+3)`, 'Buscamos dos números que sumen 2 y multipliquen −3: 3 y −1. Al multiplicar (z−1)(z+3) se obtiene z²+2z−3.', 'El denominador revela una raíz doble en 1 y otra en −3.'),
+      s('Factorizar y cancelar',String.raw`-z^2+z=-z(z-1);\quad Y(z)=\frac{-z(z-1)}{(z-1)^2(z+3)}=\frac{-z}{(z-1)(z+3)}`, 'Se cancela sólo uno de los dos factores z−1. Queda un polo simple en 1 y otro en −3. No se cancela el factor z+3.', 'La multiplicidad del polo en 1 baja de 2 a 1.'),
+      s('Preparar las fracciones parciales',String.raw`\frac{Y(z)}z=\frac{-1}{(z-1)(z+3)}=\frac A{z-1}+\frac B{z+3}`, 'Dividir entre z permite usar luego la pareja z/(z−a) ↔ aᵏ. A y B son constantes por determinar.', 'Se separan los dos polos.'),
+      s('Eliminar denominadores',String.raw`-1=A(z+3)+B(z-1)`, 'Multiplicamos la identidad por (z−1)(z+3). Esta igualdad polinómica permite evaluar las raíces sin dividir entre cero.', 'Las constantes se encuentran en una identidad polinómica.'),
+      s('Calcular A',String.raw`z=1:\quad -1=4A+0\quad\Rightarrow\quad A=-\frac14`, 'Al sustituir z = 1 se elimina B(z−1). Dividimos entre 4.', 'La contribución del polo en 1 tiene coeficiente −1/4.'),
+      s('Calcular B',String.raw`z=-3:\quad -1=0-4B\quad\Rightarrow\quad B=\frac14`, 'Al sustituir z = −3 se elimina A(z+3). Dividir −1 entre −4 da +1/4.', 'La contribución del polo en −3 tiene coeficiente +1/4.'),
+      s('Multiplicar nuevamente por z',String.raw`\frac Yz=-\frac1{4(z-1)}+\frac1{4(z+3)}\quad\Rightarrow\quad Y=-\frac14\frac z{z-1}+\frac14\frac z{z-(-3)}`, 'Restituimos el factor z. Ambas fracciones tienen exactamente la forma de la transformada de una sucesión geométrica.', 'La expresión está lista para invertir.'),
+      s('Invertir cada término',String.raw`\mathcal Z^{-1}\!\left\{\frac z{z-a}\right\}=a^k\quad\Rightarrow\quad y_k=-\frac14(1)^k+\frac14(-3)^k`, 'Usamos la pareja geométrica con a = 1 y a = −3, conservando ambos coeficientes.', 'Y(z) vuelve al dominio de las muestras.'),
+      s('Simplificar y obtener la ROC',String.raw`y_k=\frac{(-3)^k-1}{4},\quad k\geq0;\qquad |z|>\max(1,3)=3`, 'Como 1ᵏ = 1, reunimos los términos sobre 4. La ROC causal debe estar fuera de ambos polos; el de mayor módulo es −3.', 'Queda la solución cerrada con ROC |z| > 3.'),
+      s('Verificar los tres datos iniciales',String.raw`y_0=\frac{1-1}4=0,\quad y_1=\frac{-3-1}4=-1,\quad y_2=\frac{9-1}4=2`, 'La fórmula satisface las tres condiciones del enunciado. Como comprobación adicional, la recurrencia da y₃ = −2 + 5(−1) − 3(0) = −7.', 'Los valores calculados coinciden con los datos originales.'),
+      s('Verificar toda la recurrencia',String.raw`\begin{aligned}y_{k+3}+y_{k+2}-5y_{k+1}+3y_k&=\frac{(-3)^k[-27+9+15+3]+[-1-1+5-3]}4\\&=\frac{0+0}4=0\end{aligned}`, 'Sustituimos la solución en los cuatro términos. Tanto la parte exponencial como la constante se anulan, para todo k ≥ 0. La comprobación no se limita a las primeras muestras.', 'La solución satisface la ecuación para todo k.')
+    ],
+    caseTitle:'Un controlador que sobrecorrige',caseText:'Modelo ilustrativo de control digital: un error firmado se actualiza cada segundo con tres lecturas previas. Con estos coeficientes y los datos 0, −1 y 2, las correcciones alternan y crecen. Sirve para visualizar una respuesta inestable; no describe un equipo medido ni propone un controlador operativo.',
+    caseEq:String.raw`e_{k+3}=-e_{k+2}+5e_{k+1}-3e_k,\quad(e_0,e_1,e_2)=(0,-1,2)`,
+    caseUnit:'u.',caseLabel:'Error firmado',caseScale:1,caseKind:'control',caseMeaning:'La dirección de la flecha representa el signo del error. Su magnitud crece; la ilustración limita el tamaño visual y conserva el valor numérico.'
+  }
+];
