@@ -13,7 +13,7 @@ Abrir la dirección que muestra Vite. Para producción: `npm run build`. Para re
 
 ## Contenido
 
-- 52 pasos con explicación, fórmula anterior y nueva, y animación del cambio.
+- 47 pasos con explicación, fórmula anterior y nueva, y animación del cambio. El ejercicio 3d se agrupa en 5 pasos siguiendo la hoja de resolución.
 - Navegación por pasos, reproducción automática con pausa y resolución completa.
 - Gráficas SVG de muestras discretas, tabla numérica y componentes de 3d.
 - Plano complejo con polos, frontera y exploración de la región de convergencia.

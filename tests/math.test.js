@@ -30,12 +30,13 @@ test('4d: suma de la solución recupera Y(z) y sus fracciones parciales',()=>{
     close(original,-z/(4*(z-1))+z/(4*(z+3)));
   }
 });
-test('Todas las fórmulas de los 52 pasos, enunciados y resultados se renderizan con KaTeX',()=>{
+test('Todas las fórmulas de los 47 pasos, enunciados y resultados se renderizan con KaTeX',()=>{
   for(const l of lessons){
-    for(const eq of [l.problem,l.initial,l.result,l.caseEq,...l.steps.map(s=>s.eq)].filter(Boolean)){
+    for(const eq of [l.problem,l.initial,l.result,l.caseEq,...(l.resultForms??[]).map(form=>form.eq),...l.steps.map(s=>s.eq)].filter(Boolean)){
       assert.doesNotThrow(()=>katex.renderToString(eq,{throwOnError:true,strict:'ignore'}));
     }
   }
   assert.deepEqual(lessons.map(l=>l.id),['1a','1f','3d','4d']);
-  assert.equal(lessons.reduce((n,l)=>n+l.steps.length,0),52);
+  assert.equal(lessons.find(l=>l.id==='3d').steps.length,5);
+  assert.equal(lessons.reduce((n,l)=>n+l.steps.length,0),47);
 });
